@@ -1,14 +1,14 @@
 import httpStatus from 'http-status';
 import QueryBuilder from '../../builder/QueryBuilder';
 import AppError from '../../errors/AppError';
-import { Course } from '../Course/course.model';
-import { Faculty } from '../Faculty/faculty.model';
 import { AcademicDepartment } from '../academicDepartment/academicDepartment.model';
 import { AcademicFaculty } from '../academicFaculty/academicFaculty.model';
 import { SemesterRegistration } from '../semesterRegistration/semesterRegistration.model';
 import { TOfferedCourse } from './OfferedCourse.interface';
 import { OfferedCourse } from './OfferedCourse.model';
 import { hasTimeConflict } from './OfferedCourse.utils';
+import { Course } from '../course/course.model';
+import { Faculty } from '../faculty/faculty.model';
 
 const createOfferedCourseIntoDB = async (payload: TOfferedCourse) => {
   const {
@@ -100,7 +100,7 @@ const createOfferedCourseIntoDB = async (payload: TOfferedCourse) => {
   if (isSameOfferedCourseExistsWithSameRegisteredSemesterWithSameSection) {
     throw new AppError(
       httpStatus.BAD_REQUEST,
-      `Offered course with same section is already exist!`,
+      `Offered course with same section already exists!`,
     );
   }
 
@@ -188,7 +188,7 @@ const updateOfferedCourseIntoDB = async (
   if (semesterRegistrationStatus?.status !== 'UPCOMING') {
     throw new AppError(
       httpStatus.BAD_REQUEST,
-      `You can not update this offered course as it is ${semesterRegistrationStatus?.status}`,
+      `You can not update an upcoming semester registration !`,
     );
   }
 
@@ -230,10 +230,10 @@ const deleteOfferedCourseFromDB = async (id: string) => {
     throw new AppError(httpStatus.NOT_FOUND, 'Offered Course not found');
   }
 
-  const semesterRegistation = isOfferedCourseExists.semesterRegistration;
+  const semesterRegistration = isOfferedCourseExists.semesterRegistration;
 
   const semesterRegistrationStatus =
-    await SemesterRegistration.findById(semesterRegistation).select('status');
+    await SemesterRegistration.findById(semesterRegistration).select('status');
 
   if (semesterRegistrationStatus?.status !== 'UPCOMING') {
     throw new AppError(

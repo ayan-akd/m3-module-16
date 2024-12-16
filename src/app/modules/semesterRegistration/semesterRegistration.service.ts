@@ -33,7 +33,7 @@ const createSemesterRegistrationIntoDB = async (
   if (isThereAnyUpcomingOrOngoingSEmester) {
     throw new AppError(
       httpStatus.BAD_REQUEST,
-      `There is already an ${isThereAnyUpcomingOrOngoingSEmester.status} registered semester !`,
+      `There is already an ${isThereAnyUpcomingOrOngoingSEmester.status} registered semester!`,
     );
   }
   // check if the semester is exist
@@ -116,7 +116,7 @@ const updateSemesterRegistrationIntoDB = async (
   if (currentSemesterStatus === RegistrationStatus.ENDED) {
     throw new AppError(
       httpStatus.BAD_REQUEST,
-      `This semester is already ${currentSemesterStatus}`,
+      `This semester has already ${currentSemesterStatus}`,
     );
   }
 
